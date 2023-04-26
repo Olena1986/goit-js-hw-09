@@ -14,6 +14,7 @@ const options = {
     } else {
       startBtn.removeAttribute('disabled'); 
     }
+    
   },
 };
 
@@ -33,7 +34,7 @@ function onBtnClick() {
   const timeToCount = flatpickrEl.selectedDates[0] - Date.now();
   let timeLeft = timeToCount;
   const countdown = setInterval(() => {
-    const { days, hours, minutes, seconds } = convertMs(timeLeft);
+    const { days, hours, minutes, seconds } = convertMs(flatpickrEl.selectedDates[0] - Date.now());
     daysEl.textContent = addLeadingZero(days);
     hoursEl.textContent = addLeadingZero(hours);
     minutesEl.textContent = addLeadingZero(minutes);
@@ -43,7 +44,7 @@ function onBtnClick() {
     
     if (timeLeft < 0) {
       
-      clearInterval(countdown)
+      clearInterval(countdown);
     }
   }, 1000);
 
