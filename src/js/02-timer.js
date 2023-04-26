@@ -10,9 +10,9 @@ const options = {
   onClose(selectedDates) {
     if (new Date() > selectedDates[0]) {
       Notiflix.Notify.warning("Please choose a date in the future");
-      startBtn.disabled = true;
+   startBtn.setAttribute('disabled', 'disabled'); 
     } else {
-      startBtn.disabled = false;
+      startBtn.removeAttribute('disabled'); 
     }
   },
 };
@@ -25,19 +25,26 @@ const minutesEl = document.querySelector('[data-minutes]');
 const secondsEl = document.querySelector('[data-seconds]');
 
 const startBtn = document.querySelector('[data-start]');
-startBtn.disabled = true;
+let timerActive = false;
 
 startBtn.addEventListener('click', onBtnClick);
 
 function onBtnClick() {
   const timeToCount = flatpickrEl.selectedDates[0] - Date.now();
-
+  let timeLeft = timeToCount;
   const countdown = setInterval(() => {
-    const { days, hours, minutes, seconds } = convertMs(flatpickrEl.selectedDates[0] - Date.now());
+    const { days, hours, minutes, seconds } = convertMs(timeLeft);
     daysEl.textContent = addLeadingZero(days);
     hoursEl.textContent = addLeadingZero(hours);
     minutesEl.textContent = addLeadingZero(minutes);
     secondsEl.textContent = addLeadingZero(seconds);
+
+    timeLeft -= 1000;
+    
+    if (timeLeft < 0) {
+      
+      clearInterval(countdown)
+    }
   }, 1000);
 
   setTimeout(() => { clearInterval(countdown) }, timeToCount)
@@ -68,7 +75,8 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
-}
+} 
+
 
 
 
